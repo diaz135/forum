@@ -1,0 +1,61 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-success"><i class="fas fa-tools"></i> Bienvenue sur le Forum de Bricolage</h2>
+    <p class="text-center">Partagez vos projets et idées de bricolage avec la communauté !</p>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'publier' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Publiez un nouveau projet
+        </a>
+    </div>
+
+    <h3>Projets récents</h3>
+    <ul class="list-group">
+        {% for publication in publications %}
+            <li class="list-group-item">
+                <strong>{{ publication.titre }}</strong> par 
+                <a href="{% url 'profil_auteur' publication.user.id %}">{{ publication.user.username }}</a>
+                <br>
+                <a href="{% url 'publication_detail' publication.id %}" class="btn btn-link">Voir les détails</a>
+                <br>
+                {% if publication.image %}
+                    <img src="{{ publication.image.url }}" alt="Image de {{ publication.titre }}" class="img-fluid mt-2" style="max-width: 200px; height: auto;">
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucun projet récent pour le moment. Soyez le premier à partager !</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<style>
+    body {
+        background-color: #ffffff; /* Fond blanc pour la page */
+    }
+    .container {
+        background-color: #ffffff; /* Fond blanc pour le conteneur principal */
+        border-radius: 10px; /* Bordures arrondies */
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère autour du contenu */
+    }
+    .btn-primary {
+        background: linear-gradient(90deg, #ffa69e, #ff8c82); /* Dégradé pour les boutons */
+        border-color: #ffa69e;
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #ff8c82, #ff5e62); /* Dégradé foncé au survol */
+        border-color: #ff5e62;
+    }
+    .btn-link {
+        color: #6a9c9a; /* Couleur douce pour le lien */
+        text-decoration: none;
+    }
+    .btn-link:hover {
+        color: #ff8c82; /* Couleur du lien au survol */
+    }
+</style>
+{% endblock %}

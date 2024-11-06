@@ -1,0 +1,68 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Vérifier les publications</h2>
+
+    <!-- Bouton Retour -->
+    <a href="{% url 'home' %}" class="btn btn-primary mb-4">Retour</a>
+
+    <h3>Publications non approuvées</h3>
+    <ul class="list-group mb-4">
+        {% for publication in publications_non_approuvees %}
+            <li class="list-group-item">
+                <strong>Titre :</strong> {{ publication.titre }}<br>
+                <strong>Auteur :</strong> {{ publication.auteur.username }}<br>
+                <strong>Date de création :</strong> {{ publication.date_creation|date:"d-m-Y H:i" }}<br>
+                <a href="{% url 'approuver_publication' publication.id %}" class="btn btn-success btn-sm mt-2">Approuver</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucune publication à vérifier.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Publications approuvées</h3>
+    <ul class="list-group">
+        {% for publication in publications_approuvees %}
+            <li class="list-group-item">
+                <strong>Titre :</strong> {{ publication.titre }}<br>
+                <strong>Auteur :</strong> {{ publication.auteur.username }}<br>
+                <strong>Date de création :</strong> {{ publication.date_creation|date:"d-m-Y H:i" }}<br>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucune publication approuvée.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<style>
+    .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+        background-color: #4caf50;
+        border-color: #4caf50;
+    }
+    .btn-primary:hover {
+        background-color: #45a049;
+        border-color: #45a049;
+    }
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+    .list-group-item {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}

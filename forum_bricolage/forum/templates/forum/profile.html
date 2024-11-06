@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien vers Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Chargement du module static -->
+    {% load static %}
+    <style>
+        body {
+            background-image: url('{% static "forum/fond.jpg" %}'); /* Remplacez par le chemin de votre image */
+            background-size: cover; /* Couvre tout l'écran */
+            background-position: center; /* Centre l'image */
+            background-repeat: no-repeat; /* Ne répète pas l'image */
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center text-white">Mon Profil</h1>
+
+     <div class="text-center mb-4">
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+            <i class="fas fa-user-edit"></i> Éditer mon profil
+        </a>
+        <a href="{% url 'publier' %}" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Créer une nouvelle publication
+        </a>
+        <a href="{% url 'logout' %}" class="btn btn-danger">
+            <i class="fas fa-sign-out-alt"></i> Se déconnecter
+        </a>
+    </div>
+    <h2 class="text-white">Mes Publications</h2>
+    <ul class="list-group mb-4">
+        {% for publication in publications %}
+            <li class="list-group-item">
+                <h3>{{ publication.titre }}</h3>
+                <p>{{ publication.contenu }}</p>
+                {% if publication.image %}
+                    <img src="{{ publication.image.url }}" alt="{{ publication.titre }}" class="img-fluid" style="max-width: 200px;">
+                {% endif %}
+                <a href="{% url 'edit_publication' publication.pk %}" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit"></i> Éditer
+                </a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucune publication trouvée.</li>
+        {% endfor %}
+    </ul>
+    
+    
+    <!-- Bouton Retour -->
+    <div class="text-center">
+        <a href="{% url 'home' %}" class="btn btn-secondary">
+            <i class="fas fa-home"></i> Retour à l'accueil
+        </a>
+    </div>
+</div>
+
+<!-- Lien vers Bootstrap JS et jQuery (pour les fonctionnalités interactives) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

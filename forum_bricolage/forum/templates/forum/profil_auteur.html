@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil de {{ auteur.username }}</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <!-- Titre du profil de l'auteur -->
+    <h2 class="text-center">Profil de {{ auteur.username }}</h2>
+
+    <!-- Bouton Retour à la page d'accueil -->
+    <div class="text-center mb-4">
+        <a href="{% url 'home' %}" class="btn btn-secondary">Retour</a>
+    </div>
+
+    <!-- Statistiques : nombre d'abonnés et de likes -->
+    <div class="stats text-center mb-4">
+        <p><strong>{{ auteur.followers.count }} abonnés</strong></p>
+        <p><strong>{{ auteur.likes.count }} likes</strong></p>
+    </div>
+
+    <!-- Bouton pour suivre ou se désabonner de l'auteur -->
+    <div class="follow-container text-center mb-4">
+        {% if request.user in auteur.followers.all %}
+            <form action="{% url 'unfollow_user' auteur.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Se désabonner</button>
+            </form>
+            <p>Vous suivez actuellement {{ auteur.username }}.</p>
+        {% else %}
+            <form action="{% url 'follow_user' auteur.id %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Suivre</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <!-- Affichage des messages de notification -->
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Liste des publications de l'auteur -->
+    <h3>Publications de {{ auteur.username }}</h3>
+    <ul class="list-group">
+        {% for publication in publications %}
+            <li class="list-group-item">
+                <strong>{{ publication.titre }}</strong>
+                <p>{{ publication.contenu|truncatewords:30 }}</p>
+                <p><strong>{{ publication.likes.count }} likes</strong></p>
+    
+                <!-- Vérifier si l'utilisateur a aimé la publication -->
+                {% if publication.id in liked_publications %}
+                    <form action="{% url 'unlike_publication' publication.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">Ne plus aimer</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'like_publication' publication.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">Aimer</button>
+                    </form>
+                {% endif %}
+                <br>
+                <a href="{% url 'publication_detail' publication.id %}" class="btn btn-link">Voir les détails</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucune publication trouvée.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Lien vers Bootstrap JS et jQuery (pour les fonctionnalités interactives) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

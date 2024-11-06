@@ -1,0 +1,128 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Fond clair et agréable */
+    color: #333;
+}
+
+/* Header */
+header {
+    background: linear-gradient(90deg, #6db3f2, #4a90e2); /* Couleurs de bleu plus douces */
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+header nav .nav-link {
+    font-weight: bold;
+    transition: color 0.3s ease;
+    color: #e0e0e0; /* Couleur des liens plus douce */
+}
+
+header nav .nav-link:hover {
+    color: #ffffff; /* Couleur au survol */
+}
+
+/* Footer */
+footer {
+    background-color: #f1f1f1;
+    color: #555;
+    border-top: 2px solid #e2e2e2;
+    padding: 15px;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* Card pour chaque publication */
+.card {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card .card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4a90e2; /* Couleur de titre plus douce */
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.card-footer {
+    background-color: #fafafa;
+    border-top: 1px solid #e2e2e2;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: #4a90e2; /* Couleur de bouton plus douce */
+    border-color: #4a90e2;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #357ab8; /* Couleur au survol */
+    border-color: #357ab8;
+}
+
+/* Boutons secondaires */
+.btn-secondary {
+    background-color: #6c757d; /* Bouton secondaire gris */
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Badges */
+.badge-secondary {
+    background-color: #6c757d;
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+/* Alertes */
+.alert-info {
+    background-color: #e7f3ff; /* Couleur d'arrière-plan plus douce */
+    color: #3178c6; /* Couleur de texte */
+    border: 1px solid #b3d1ff; /* Couleur de bordure */
+    border-radius: 5px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .card img {
+        height: 150px;
+    }
+}

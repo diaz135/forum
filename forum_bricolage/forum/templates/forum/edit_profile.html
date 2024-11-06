@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditer Profil</title>
+    <!-- Lien vers Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lien vers Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f4f8; /* Couleur de fond douce */
+        }
+        h1 {
+            color: #6a9c9a; /* Couleur du titre */
+            margin-bottom: 30px; /* Espacement en bas du titre */
+        }
+        .container {
+            max-width: 600px; /* Largeur maximale du formulaire */
+            margin: 50px auto; /* Centrer le conteneur avec un espacement en haut */
+            padding: 20px;
+            background-color: #ffffff; /* Couleur blanche pour le conteneur */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Ombre plus marquée pour le conteneur */
+        }
+        .btn-custom {
+            background-color: #ffa69e; /* Couleur du bouton */
+            color: #fff; /* Couleur du texte du bouton */
+        }
+        .btn-custom:hover {
+            background-color: #ff8c82; /* Couleur légèrement plus foncée au survol */
+        }
+        .cancel-link {
+            color: #6a9c9a; /* Couleur du lien */
+        }
+        .cancel-link:hover {
+            text-decoration: underline; /* Soulignement au survol */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center"><i class="fas fa-user-edit"></i> Éditer Profil</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-custom btn-block">
+                <i class="fas fa-save"></i> Mettre à jour
+            </button>
+        </form>
+        <a href="{% url 'profile' %}" class="cancel-link d-block text-center mt-3">
+            <i class="fas fa-times"></i> Annuler
+        </a>
+    </div>
+
+    <!-- Lien vers Bootstrap JS et jQuery (pour les fonctionnalités interactives) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

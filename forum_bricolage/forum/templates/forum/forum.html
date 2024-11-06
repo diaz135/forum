@@ -1,0 +1,34 @@
+{% extends 'forum/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-success"><i class="fas fa-tools"></i> Bienvenue sur le Forum de Bricolage</h2>
+    <p class="text-center">Partagez vos projets et idées de bricolage avec la communauté !</p>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'publier' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Publiez un nouveau projet
+        </a>
+    </div>
+
+    <h3>Projets récents</h3>
+    <ul class="list-group">
+        {% for publication in publications %}
+            <li class="list-group-item">
+                <strong>{{ publication.titre }}</strong> par 
+                <a href="{% url 'profil_auteur' publication.auteur.id %}">{{ publication.auteur.user.username }}</a>
+                <br>
+                <small>
+                    Nombre de projets publiés : {{ publication.auteur.projets.count }}  <!-- Compte le nombre de projets de l'auteur -->
+                    <br>
+                    Date d'inscription : {{ publication.auteur.date_inscription|date:"d M Y" }}  <!-- Date d'inscription de l'auteur -->
+                </small>
+                <br>
+                <a href="{% url 'publication_detail' publication.id %}" class="btn btn-link">Voir les détails</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucun projet récent pour le moment. Soyez le premier à partager !</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

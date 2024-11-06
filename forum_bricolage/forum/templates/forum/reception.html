@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages Directs</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Messages Directs</h2>
+    
+    <!-- Liste des messages reçus -->
+    <div class="mb-4">
+        <ul class="list-group">
+            {% for message in user.received_messages.all %}
+                <li class="list-group-item">
+                    <strong>{{ message.sender.username }}</strong>: {{ message.content }} <br>
+                    <small class="text-muted">{{ message.timestamp }}</small>
+                </li>
+            {% empty %}
+                <li class="list-group-item">Aucun message reçu.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Formulaire pour envoyer un message -->
+    <form method="POST" action="{% url 'send_message' user.id %}" class="mb-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <textarea name="content" required class="form-control" placeholder="Écrire un message..." rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

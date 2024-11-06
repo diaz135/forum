@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat avec {{ destinataire.username }}</title>
+    <link rel="stylesheet" href="{% static 'forum/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f9f4f2, #ffded4); /* Dégradé pour le fond du corps */
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background: linear-gradient(90deg, #ff8c82, #ffa69e); /* Dégradé pour le header */
+            color: #ffffff;
+            padding: 10px 0;
+        }
+        #messages div {
+            background-color: #ffffff; /* Couleur blanche pour les messages */
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre légère pour les messages */
+        }
+        #messages strong {
+            color: #6a9c9a; /* Couleur pour les noms d'utilisateur (vert doux) */
+        }
+        .btn-primary {
+            background-color: #ffa69e; /* Couleur pour le bouton d'envoi */
+            border-color: #ffa69e;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+        }
+        .btn-primary:hover {
+            background-color: #ff8c82; /* Couleur légèrement plus foncée au survol */
+            border-color: #ff8c82;
+        }
+        .btn-secondary {
+            font-size: 1rem;
+            padding: 8px 15px;
+            background-color: #ffffff; /* Couleur blanche pour le bouton de retour */
+            border: 1px solid #6a9c9a; /* Bordure verte douce */
+            color: #6a9c9a;
+        }
+        .btn-secondary:hover {
+            background-color: #e0f2f1; /* Couleur légèrement teintée au survol */
+        }
+        footer {
+            background: linear-gradient(90deg, #ffa69e, #ff8c82); /* Dégradé pour le footer */
+            color: #ffffff;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-white text-center py-4">
+        <h1>Chat avec {{ destinataire.username }}</h1>
+    </header>
+
+    <main class="container my-4">
+        <div id="messages" class="mb-4">
+            {% for message in messages %}
+                <div class="mb-2">
+                    <strong><i class="fas fa-user"></i> {{ message.expediteur.username }}:</strong> 
+                    <span>{{ message.contenu }}</span>
+                </div>
+            {% empty %}
+                <p>Aucun message encore.</p>
+            {% endfor %}
+        </div>
+
+        <form method="post" class="d-flex flex-column">
+            {% csrf_token %}
+            <div class="form-group">
+                <textarea name="contenu" class="form-control" rows="3" required placeholder="Écrivez votre message..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
+        </form>
+
+        <div class="text-center mt-3">
+            <!-- Bouton Retour à la page d'accueil -->
+            <a href="{% url 'home' %}" class="btn btn-secondary btn-lg">Retour à l'Accueil</a>
+        </div>
+    </main>
+
+    <footer class="text-center py-3">
+        <p>&copy; 2023 Forum de Bricolage. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

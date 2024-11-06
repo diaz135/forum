@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Publication</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h2 class="mb-4">{{ publication.titre }}</h2>
+    <button onclick="window.history.back();" class="btn btn-secondary mb-3"><i class="fas fa-arrow-left"></i> Retour</button>
+    
+    <div class="mb-4">
+        <p>{{ publication.contenu }}</p>
+        <p class="text-muted">Publié par <strong>{{ publication.auteur }}</strong> le {{ publication.date_creation|date:"d M Y H:i" }}</p>
+        
+        {% if publication.image %}
+            <img src="{{ publication.image.url }}" alt="Image de la publication" class="img-fluid mb-3">
+        {% endif %}
+    </div>
+
+    <h3 class="mb-3">Commentaires</h3>
+    <ul id="comment-list" class="list-group mb-4">
+        {% for commentaire in publication.commentaires.all %}
+            <li class="list-group-item">
+                <strong>{{ commentaire.auteur }}</strong>: {{ commentaire.contenu }} 
+                <span class="text-muted">({{ commentaire.date_creation|date:"d M Y H:i" }})</span>
+            </li>
+        {% empty %}
+            <li class="list-group-item">Aucun commentaire.</li>
+        {% endfor %}
+    </ul>
+
+    <form id="comment-form" data-publication-id="{{ publication.id }}" class="mb-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <textarea id="comment-content" name="contenu" required class="form-control" placeholder="Écrire un commentaire..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-comment-dots"></i> Commenter</button>
+    </form>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <p>Likes : <span id="like-count">{{ publication.likes.count }}</span></p>
+        <button class="like-button btn btn-outline-primary" data-publication-id="{{ publication.id }}">
+            <i class="fas fa-thumbs-up"></i>
+            {% if publication.id in liked_publications %}
+                Ne plus aimer
+            {% else %}
+                Aimer
+            {% endif %}
+        </button>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Gestion des commentaires
+    $('#comment-form').on('submit', function(e) {
+        e.preventDefault(); // Empêche le rechargement de la page
+        var publicationId = $(this).data('publication-id');
+        var contenu = $('#comment-content').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "commenter" %}',  // Remplacez par l'URL de votre vue
+            data: {
+                'publication_id': publicationId,
+                'contenu': contenu,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                // Ajoutez le commentaire à la page sans recharger
+                $('#comment-list').append('<li class="list-group-item"><strong>' + response.auteur + '</strong>: ' + response.contenu + ' <span class="text-muted">(' + response.date_creation + ')</span></li>');
+                $('#comment-content').val(''); // Réinitialisez le champ de commentaire
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    // Gestion des likes
+    $('.like-button').on('click', function() {
+        var button = $(this);
+        var publicationId = button.data('publication-id');
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "like_publication_ajax" 0 %}'.replace('0', publicationId),
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                console.log(response);  // Affiche la réponse JSON pour vérifier son contenu
+                
+                // Vérifie si la réponse contient bien les informations nécessaires
+                if (response.new_like_count !== undefined && response.liked !== undefined) {
+                    // Mettez à jour le nombre de likes sur la page
+                    $('#like-count').text(response.new_like_count);
+                    // Changez le texte et l'icône du bouton en fonction de l'état
+                    var buttonText = response.liked ? 'Ne plus aimer' : 'Aimer';
+                    button.html('<i class="fas fa-thumbs-up"></i> ' + buttonText);
+                } else {
+                    console.error("La réponse ne contient pas les données attendues.");
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log(xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+});
+</script>
